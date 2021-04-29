@@ -13,6 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -37,6 +39,7 @@ public class LoginPageFXMLDocumentController implements Initializable {
     @FXML
     private void onLoginClicked(ActionEvent event) {
         
+        if("admin".equals(lognUsername.getText().trim()) && "admin".equals(loginPassword.getText().trim())){
          try {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/billing/billingFXMLDocument.fxml"));
             Parent root = (Parent) fxmlLoader.load();
@@ -47,7 +50,13 @@ public class LoginPageFXMLDocumentController implements Initializable {
             MartManagementSystem.stg.close();
     } catch(Exception e) {
        e.printStackTrace();
-      }
+      }     
+        }else{
+            Alert alert = new Alert(AlertType.NONE);
+            alert.setAlertType(AlertType.ERROR);
+            alert.setContentText("Incorrect username or password");
+            alert.show();
+        }
     }
  
    

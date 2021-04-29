@@ -9,8 +9,8 @@
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <Label layoutX="147.0" layoutY="210.0" text="Username" />
-      <TextField fx:id="lognUsername" layoutX="222.0" layoutY="194.0" prefHeight="50.0" prefWidth="288.0" />
-      <TextField fx:id="loginPassword" layoutX="222.0" layoutY="267.0" prefHeight="50.0" prefWidth="288.0" />
+      <TextField fx:id="lognUsername" layoutX="222.0" layoutY="194.0" prefHeight="50.0" prefWidth="288.0" promptText="admin" />
+      <TextField fx:id="loginPassword" layoutX="222.0" layoutY="267.0" prefHeight="50.0" prefWidth="288.0" promptText="admin" />
       <Label layoutX="147.0" layoutY="283.0" text="Password" />
       <Button fx:id="btnLogin" layoutX="458.0" layoutY="346.0" mnemonicParsing="false" onAction="#onLoginClicked" text="Login" />
     </children>
