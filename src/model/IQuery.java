@@ -9,17 +9,18 @@ import java.util.List;
 
 /**
  * IQuery provides a generic interface for performing both selections and
- * commands on a data source. The supported queries are specified as an enum,
- * which is provided as the parameter Q. The type of the list elements returned
- * by a selection method and the type of the data transfer object provided to a
- * command methods are specified as the parameter T.
+ * commands on a data source.The supported queries are specified as an enum,
+ which is provided as the parameter Q. The type of the list elements returned
+ by a selection method and the type of the data transfer object provided to a
+ command methods are specified as the parameter T.
  *
  * @author Dennis
  * @param <Q> enum specifying supported queries
  * @param <T> the type of list objects returned by selection methods and the of
  * the argument for command methods
+ * @param <S>
  */
-public interface IQuery<Q, T> {
+public interface IQuery<Q, T, S> {
 
     /**
      * Performs a selection query on the underlying data source. Note that
@@ -33,7 +34,7 @@ public interface IQuery<Q, T> {
      * @throws QueryException
      */
     public List<T> select(Q q, Object... o) throws QueryException;
-
+    public List<S> selectSupplier(Q q, Object... o) throws QueryException;
     /**
      * Performs a command query (insert, delete, update ... )
      *
@@ -44,4 +45,6 @@ public interface IQuery<Q, T> {
      * @throws QueryException
      */
     int command(Q q, T t) throws QueryException;
+    
+    int supplierCommand(Q q, S s)throws QueryException;
 }

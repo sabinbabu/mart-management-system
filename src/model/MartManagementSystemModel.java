@@ -18,10 +18,11 @@ import java.util.List;
  *
  * @author sabin
  */
-public class MartManagementSystemModel implements  IConnect, IQuery<MartManagementSystemModel.Query, Employee> {
+public class MartManagementSystemModel implements  IConnect, IQuery<MartManagementSystemModel.Query, Employee, Supplier> {
     
      public static enum Query {
-        INSERT,ALL,EMPLOYEENAME,UPDATE,DELETE
+        INSERT,ALL,EMPLOYEENAME,UPDATE,DELETE,
+        INSERTSUPPLIER,DISPLAYALLSUPPLIER,SUPPLIERNAME,UPDATESUPPLIER,DELETESUPPLIER
     };
      
 
@@ -40,9 +41,10 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
      public MartManagementSystemModel() {
         // Specify the queries that are supported
         //insert into database
+        //EMPLOYEE
         sqlCommands.put(MartManagementSystemModel.Query.INSERT,
                 "INSERT INTO EMPLOYEE (EMPLOYEENAME, EMPLOYEEEMAIL, EMPLOYEENUMBER, EMPLOYEEPASSWORD ) VALUES ( ?, ?, ?, ? )");
-         //get records of all students
+         //get records of all EMPLOYEES
         sqlCommands.put(MartManagementSystemModel.Query.ALL,
                 "SELECT * FROM EMPLOYEE");
         //select employee with particular name
@@ -54,6 +56,24 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
         //delete employee
         sqlCommands.put(Query.DELETE,
                 "DELETE FROM EMPLOYEE WHERE EMPLOYEEID = ?");
+        
+        
+        //SUPPLIER 
+         sqlCommands.put(MartManagementSystemModel.Query.INSERTSUPPLIER,
+                "INSERT INTO SUPPLIER (SUPPLIERNAME, SUPPLIEREMAIL, SUPPLIERNUMBER, SUPPLIERADDRESS ) VALUES ( ?, ?, ?, ? )");
+         //get records of all SUPPLIERS
+        sqlCommands.put(MartManagementSystemModel.Query.DISPLAYALLSUPPLIER,
+                "SELECT * FROM SUPPLIER");
+        //select employee with particular name
+         sqlCommands.put(Query.SUPPLIERNAME,
+                "SELECT * FROM SUPPLIER WHERE SUPPLIERNAME = ? AND SUPPLIERNUMBER = ?");
+         // update EMPLOYEE
+        sqlCommands.put(Query.UPDATESUPPLIER,
+                "UPDATE SUPPLIER SET SUPPLIERNAME = ? , SUPPLIEREMAIL =?, SUPPLIERNUMBER = ? , SUPPLIERADDRESS = ? WHERE SUPPLIERID = ?");
+        //delete employee
+        sqlCommands.put(Query.DELETESUPPLIER,
+                "DELETE FROM SUPPLIER WHERE SUPPLIERID = ?");
+        
        
     }
      
@@ -113,13 +133,32 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
             case UPDATE:
                 return updateEmployee(employee);
             case DELETE:
-                return deleteEmployee(employee);
-           
+                return deleteEmployee(employee);           
         }
         // Should never happen
         return -1;
-
     }
+    
+
+    @Override
+    public int supplierCommand(Query query, Supplier supplier) throws QueryException {
+        switch (query) {
+            case INSERTSUPPLIER:
+                return addSupplier(supplier);
+            case UPDATESUPPLIER:
+                return updateSupplier(supplier);
+            case DELETESUPPLIER:
+                return deleteSupplier(supplier);
+        }
+        // Should never happen
+        return -1;
+    }
+    
+    
+    
+    
+    
+    //EMPLOYEE
     
     
     @Override
@@ -264,5 +303,152 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
             throw (new QueryException("Unable to execute selection query", e));
         }
     }
+     
+     
+     
+     //SUPPLIER
+     
+     
+     
+      @Override
+    public List<Supplier> selectSupplier(Query q, Object... o) throws QueryException {
+        switch (q) {
+             case DISPLAYALLSUPPLIER:
+                return getAllSupplier();
+             case SUPPLIERNAME:
+                return getSupplierByName((String) o[0], (String) o[1]);
+        }
+        // Should never happen
+        return null;
+    }
+
+    private Supplier createSupplier(ResultSet rs) throws QueryException {
+        Supplier sup = null;
+        try {
+            sup = new Supplier(
+                    rs.getInt("supplierID"),
+                    rs.getString("supplierName"),
+                    rs.getString("supplierEmail"),
+                    rs.getString("supplierNumber"),
+                    rs.getString("supplierAddress")                   
+            );
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to process the result of selection query", e));
+        }
+        return sup;
+    }
+
+    /*
+     * Add a record to the database. Record fields are extracted from the method
+     * parameter, which is a Supplier object. 
+     */
+    private int addSupplier(Supplier sup) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.INSERTSUPPLIER);
+
+        // insert student attributes into prepared statement
+        try {
+            ps.setString(1, sup.getSupplierName());
+            ps.setString(2, sup.getSupplierEmail());
+            ps.setString(3, sup.getSupplierNumber());
+            ps.setString(4, sup.getSupplierAddress());
+           
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform insert command", e));
+        }
+    }
+
+    private int updateSupplier(Supplier sup) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.UPDATESUPPLIER);
+
+        // update student attributes into prepared statement
+        try {
+
+            ps.setString(1, sup.getSupplierName());
+            ps.setString(2, sup.getSupplierEmail());
+            ps.setString(3, sup.getSupplierNumber());
+            ps.setString(4, sup.getSupplierAddress());
+            ps.setInt(5, sup.getSupplierID());
+            
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform update command", e));
+        }
+    }
     
+     private int deleteSupplier(Supplier sup) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.DELETESUPPLIER);
+
+        // update student attributes into prepared statement
+        try {
+            ps.setInt(1, sup.getSupplierID());
+            
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform update command", e));
+        }
+    }
+    
+
+    /*
+     * Select list of all supplier
+     */
+    private List<Supplier> getAllSupplier() throws QueryException {
+        // get prepared statement
+        PreparedStatement ps = statements.get(Query.DISPLAYALLSUPPLIER);
+
+        try (ResultSet resultSet = ps.executeQuery()) {
+            List<Supplier> results = new ArrayList<>();
+            while (resultSet.next()) {
+                Supplier sup = createSupplier(resultSet);
+                results.add(sup);
+            }
+            return results;
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to execute selection query", e));
+        }
+    }
+    
+    
+    
+     private List<Supplier> getSupplierByName(String name, String id) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.SUPPLIERNAME);
+        try {
+            // Insert grade into prepared statement
+            ps.setString(1, name);
+            ps.setString(2, id );
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try (ResultSet resultSet = ps.executeQuery()) {
+            List<Supplier> results = new ArrayList<>();
+            while (resultSet.next()) {
+                results.add(createSupplier(resultSet));
+            }
+            return results;
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to execute selection query", e));
+        }
+    }
+     
 }

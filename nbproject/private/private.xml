@@ -4,7 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/sabin/Documents/NetBeansProjects/MartManagementSystem/src/view/billing/BillingFXMLDocumentController.java</file>
-            <file>file:/C:/Users/sabin/Documents/NetBeansProjects/MartManagementSystem/src/view/login/LoginPageFXMLDocumentController.java</file>
+            <file>file:/C:/Users/sabin/Documents/NetBeansProjects/MartManagementSystem/src/presenter/EmployeePresenter.java</file>
+            <file>file:/C:/Users/sabin/Documents/NetBeansProjects/MartManagementSystem/src/view/billing/ShowSupplierDetailsFXMLController.java</file>
         </group>
     </open-files>
 </project-private>

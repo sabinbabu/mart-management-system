@@ -43,15 +43,15 @@ public class LoginPageFXMLDocumentController implements Initializable {
 
     @FXML
     private void onLoginClicked(ActionEvent event) {
-
-        if ("admin".equals(lognUsername.getText().trim()) && "admin".equals(loginPassword.getText().trim())) {
-          goToAdminHomepage();
-        } else {
-            Alert alert = new Alert(AlertType.NONE);
-            alert.setAlertType(AlertType.ERROR);
-            alert.setContentText("Incorrect username or password");
-            alert.show();
-        }
+ goToAdminHomepage();
+//        if ("admin".equals(lognUsername.getText().trim()) && "admin".equals(loginPassword.getText().trim())) {
+//          goToAdminHomepage();
+//        } else {
+//            Alert alert = new Alert(AlertType.NONE);
+//            alert.setAlertType(AlertType.ERROR);
+//            alert.setContentText("Incorrect username or password");
+//            alert.show();
+//        }
     }
 
     @Override

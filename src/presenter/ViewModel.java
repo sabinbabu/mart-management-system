@@ -7,6 +7,7 @@ package presenter;
 
 import java.util.List;
 import model.Employee;
+import model.Supplier;
 
 /**
  *
@@ -18,36 +19,40 @@ public class ViewModel {
     Employee current;
     int index;
     int n;
+    
+    
+    List<Supplier> modelSupplier;
+    Supplier currentSupplier;
+    int indexSupplier;
+    int nSupplier;
 
-    ViewModel() {
-    }
+    ViewModel() { }
 
     void set(List<Employee> m) {
         model = m;
-        index = 0;
-        n = model.size();
-        current = model.get(index);
+//        index = 0;
+//        n = model.size();
+//        current = model.get(index);
     }
 
-    IndexedEmployee previous() {
-        if (--index < 0) {
-            index = n - 1;
-        }
-        return new IndexedEmployee(model.get(index), index + 1, n);
-    }
-
-    IndexedEmployee next() {
-        if (++index > n - 1) {
-            index = 0;
-        }
-        return new IndexedEmployee(model.get(index), index + 1, n);
-    }
-
-    IndexedEmployee current() {
-        return new IndexedEmployee(model.get(index), index + 1, n);
-    }
     
     IndexedEmployee all(){
     return new IndexedEmployee(model);
             }
+    
+    
+    
+    // SUPPLIER
+    
+    void setSupplier(List<Supplier> m) {
+        modelSupplier = m;
+      //  indexSupplier = 0;
+      //  nSupplier = modelSupplier.size();
+       // currentSupplier = modelSupplier.get(indexSupplier);
+    }
+
+ 
+    IndexedSupplier allSupplier(){
+              return new IndexedSupplier(modelSupplier);
+     }
 }

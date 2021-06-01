@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import model.Employee;
+import model.Supplier;
 import presenter.EmployeePresenter;
 import presenter.IndexedEmployee;
 import presenter.IndexedSupplier;
@@ -25,53 +25,88 @@ import view.IView;
  *
  * @author sabin
  */
-public class ShowEmployeeDetailsFXMLController implements Initializable, IView<IndexedEmployee,IndexedSupplier> {
+public class ShowSupplierDetailsFXMLController implements Initializable, IView<IndexedEmployee,IndexedSupplier> {
 
-    EmployeePresenter employeePresenter;
+        EmployeePresenter employeePresenter;
+  public int selectedSupplierId;
     @FXML
-    private TextField empNameTextField;
+    private TextField supNameTextField;
     @FXML
-    private TextField empPhoneTextField;
+    private TextField supPhoneTextField;
     @FXML
-    private TextField empEmailTextField;
+    private TextField supEmailTextField;
     @FXML
     private Button btnCancel;
     @FXML
-    private TextField empPasswordTextField;
+    private TextField supAddressTextField;
     @FXML
     private Button btnUpdate;
     @FXML
     private Button btnDelete;
-    
-    public int selectedEmployeeId;
-    
-   
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
-    }   
+        // TODO
+    }    
     
-        
-    public void bind(EmployeePresenter pp) {
+     public void bind(EmployeePresenter pp) {
         employeePresenter = pp;
-        String name = BillingFXMLDocumentController.selectedComboValue.split(",")[0];
-        String number = BillingFXMLDocumentController.selectedComboValue.split(",")[1];
-        employeePresenter.findByName(name, number);
+        String name = BillingFXMLDocumentController.selectedSupplierComboValue.split(",")[0];
+        String number = BillingFXMLDocumentController.selectedSupplierComboValue.split(",")[1];
+        employeePresenter.findBySupplier(name, number);
     }
-    @Override
-    public void displayRecord(IndexedEmployee indexedEmployee) {
-        List<Employee> employeeList = indexedEmployee.getAllEmployee();
-        empNameTextField.setText(employeeList.get(0).getEmployeeName());
-        empEmailTextField.setText(employeeList.get(0).getEmployeeEmail());
-        empPhoneTextField.setText(employeeList.get(0).getEmployeeNumber());
-        empPasswordTextField.setText(employeeList.get(0).getEmployeePassword());
-        selectedEmployeeId = employeeList.get(0).getEmployeeID();
+
+    @FXML
+    private void onCancelPressed(ActionEvent event) {
+         BillingFXMLDocumentController.stg.close();
+    }
+
+    @FXML
+    private void onUpdatePressed(ActionEvent event) {
+         employeePresenter.updateSupplier(
+                selectedSupplierId, 
+                supNameTextField.getText(),
+                supEmailTextField.getText(),
+                supPhoneTextField.getText(),
+                supAddressTextField.getText()          
+        );
+         BillingFXMLDocumentController.stg.close();
+    }
+
+    @FXML
+    private void onDeletePressed(ActionEvent event) {
+         employeePresenter.deleteSupplier(
+                selectedSupplierId
+        );
+         BillingFXMLDocumentController.stg.close();
     }
 
     @Override
+    public void displayRecord(IndexedEmployee r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+ 
+    @Override
+    public void populateCombobox(IndexedEmployee r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void displaySupplierRecord(IndexedSupplier indexedSupplier) {
+          List<Supplier> supplierList = indexedSupplier.getAllSupplier();
+        supNameTextField.setText(supplierList.get(0).getSupplierName());
+        supEmailTextField.setText(supplierList.get(0).getSupplierEmail());
+        supPhoneTextField.setText(supplierList.get(0).getSupplierNumber());
+        supAddressTextField.setText(supplierList.get(0).getSupplierAddress());
+        selectedSupplierId = supplierList.get(0).getSupplierID();
+    }
+    
+    
+     @Override
     public void displayMessage(String m) {
            errorMessage(m);
     }
@@ -86,41 +121,6 @@ public class ShowEmployeeDetailsFXMLController implements Initializable, IView<I
             alert.setAlertType(Alert.AlertType.ERROR);
             alert.setContentText(m);
             alert.show();
-    }
-
-    @FXML
-    private void onCancelPressed(ActionEvent event) {
-         BillingFXMLDocumentController.stg.close();
-    }
-
-    @FXML
-    private void onUpdatePressed(ActionEvent event) {
-         employeePresenter.update(
-                selectedEmployeeId, 
-                empNameTextField.getText(),
-                empEmailTextField.getText(),
-                empPhoneTextField.getText(),
-                empPasswordTextField.getText()          
-        );
-         BillingFXMLDocumentController.stg.close();
-    }
-
-    @FXML
-    private void onDeletePressed(ActionEvent event) {
-        employeePresenter.delete(
-                selectedEmployeeId
-        );
-         BillingFXMLDocumentController.stg.close();
-    }
-
-    @Override
-    public void populateCombobox(IndexedEmployee r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void displaySupplierRecord(IndexedSupplier s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

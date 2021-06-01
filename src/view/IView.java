@@ -10,7 +10,7 @@ package view;
  *
  * @author PC
  */
-public interface IView<T> {
+public interface IView<T,S> {
 
     void displayRecord(T r);
   void displayMessage(String m);
@@ -18,4 +18,10 @@ public interface IView<T> {
   //  void displayTextArea(String t);
    // void notifySize(T r);
    void populateCombobox(T r);
+  
+   
+   
+   void displaySupplierRecord(S s);
+   void populateSupplierCombobox(S s);
+   void displaySupplierMessage(String m);
 }

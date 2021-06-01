@@ -12,10 +12,16 @@ import model.IConnect;
 import model.IQuery;
 import static model.MartManagementSystemModel.Query.ALL;
 import static model.MartManagementSystemModel.Query.DELETE;
+import static model.MartManagementSystemModel.Query.DELETESUPPLIER;
+import static model.MartManagementSystemModel.Query.DISPLAYALLSUPPLIER;
 import static model.MartManagementSystemModel.Query.EMPLOYEENAME;
 import static model.MartManagementSystemModel.Query.INSERT;
+import static model.MartManagementSystemModel.Query.INSERTSUPPLIER;
+import static model.MartManagementSystemModel.Query.SUPPLIERNAME;
 import static model.MartManagementSystemModel.Query.UPDATE;
+import static model.MartManagementSystemModel.Query.UPDATESUPPLIER;
 import model.QueryException;
+import model.Supplier;
 import view.IView;
 
 /**
@@ -37,6 +43,8 @@ public class EmployeePresenter {
         connector = ic;
         viewmodel = new ViewModel();
     }
+       
+       //EMPLOYEE
     
      public void insert(String employeeName, String employeeEmail, String employeeNumber, String employeePassword) throws IllegalArgumentException {
 
@@ -64,8 +72,7 @@ public class EmployeePresenter {
         }
     }
      
-     
-     
+   
       public void update(int employeeId,String employeeName, String employeeEmail, String employeeNumber, String employeePassword) throws IllegalArgumentException {
 
        if (employeeName.equals("") || employeeEmail.equals("") || employeeNumber.equals("") || employeePassword.equals("")) {
@@ -96,7 +103,7 @@ public class EmployeePresenter {
     }
       
       
-       public void delete(int employeeId) throws IllegalArgumentException {
+      public void delete(int employeeId) throws IllegalArgumentException {
         try {
 
             Employee emp = new Employee(employeeId, "", "", "", "");
@@ -136,7 +143,7 @@ public class EmployeePresenter {
       
       private void displayCurrentRecord(List results) {
         if (results.isEmpty()) {
-            view.displayMessage("No records found");
+            view.displayMessage("No Employee found");
             return;
         }
         view.displayRecord(viewmodel.all());
@@ -149,7 +156,7 @@ public class EmployeePresenter {
             List results = queries.select(ALL);
              viewmodel.set(results);
              if (results.isEmpty()) {
-            view.displayMessage("No records found");
+        //    view.displayMessage("No records found");
              }
              view.populateCombobox(viewmodel.all());
              
@@ -180,5 +187,147 @@ public class EmployeePresenter {
             }
     }
       
+       
+       
+       //SUPPLIER
+       
+        public void insertSupplier(String supplierName, String supplierEmail, String supplierNumber, String supplierAddress) throws IllegalArgumentException {
+
+        if (supplierName.equals("") || supplierEmail.equals("") || supplierNumber.equals("") || supplierAddress.equals("")) {
+            throw new IllegalArgumentException("Arguments must not contain an empty string");
+        }
+        try {
+
+            Supplier sup = new Supplier(supplierName, supplierEmail, supplierNumber, supplierAddress);
+            int result = queries.supplierCommand(INSERTSUPPLIER, sup);
+            if (result == 1) {               
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setAlertType(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("Supplier Added");
+            alert.show();
+            } else {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("Error");
+            alert.show();
+            }
+
+        } catch (QueryException e) {
+            System.exit(1);
+        }
+    }
+     
+   
+     public void updateSupplier(int supplierId ,String supplierName, String supplierEmail, String supplierNumber, String supplierAddress) throws IllegalArgumentException {
+
+      if (supplierName.equals("") || supplierEmail.equals("") || supplierNumber.equals("") || supplierAddress.equals("")) {
+            throw new IllegalArgumentException("Arguments must not contain an empty string");
+        }
+        try {
+
+            Supplier sup = new Supplier(supplierId, supplierName, supplierEmail, supplierNumber, supplierAddress);
+            int result = queries.supplierCommand(UPDATESUPPLIER, sup);
+            
+            if (result == 1) {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Supplier Updated");
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setContentText("Supplier not updated");
+                alert.show();
+            }
+          
+        } catch (QueryException e) {
+            view.displayError(e.getMessage());
+            System.exit(1);
+        }
+    }
+      
+      
+      public void deleteSupplier(int supplierId) throws IllegalArgumentException {
+        try {
+
+            Supplier sup = new Supplier(supplierId, "", "", "", "");
+            int result = queries.supplierCommand(DELETESUPPLIER, sup);
+            
+            if (result == 1) {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Supplier Deleted");
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setContentText("Supplier not deleted");
+                alert.show();
+            }
+          
+        } catch (QueryException e) {
+            view.displayError(e.getMessage());
+           // System.exit(1);
+        }
+    }
+     
+     
+      public void selectAllSupplier() {
+        try {
+            List results = queries.selectSupplier(DISPLAYALLSUPPLIER);            
+            viewmodel.setSupplier(results);
+             displayCurrentSupplierRecord(results);
+        } catch (QueryException e) {
+            view.displayError(e.getMessage());
+            System.exit(1);
+        }
+    }
+      
+      
+      private void displayCurrentSupplierRecord(List results) {
+        if (results.isEmpty()) {
+            view.displaySupplierMessage("No Suppliers found");
+            return;
+        }
+        view.displaySupplierRecord(viewmodel.allSupplier());
+      
+    }          
+      
+      
+      public void populateSupplierCombobox(){
+          try{
+            List results = queries.selectSupplier(DISPLAYALLSUPPLIER);
+             viewmodel.setSupplier(results);
+             if (results.isEmpty()) {
+          //  view.displayMessage("No records found");
+             }
+             view.populateSupplierCombobox(viewmodel.allSupplier());
+             
+          }catch(QueryException e){
+            view.displayError(e.getMessage());
+            System.exit(1);
+          }
+      }
+      
+      
+       public void findBySupplier(String name,String number) {
+
+        if (name.equals("")) {
+            throw new IllegalArgumentException("Argument must not be an empty string");
+        }
+            try {
+                List results = queries.selectSupplier(SUPPLIERNAME, name, number);
+                if (results.isEmpty()) {
+                    view.displayMessage("No records found");
+                } else {
+                    viewmodel.setSupplier(results);
+                    displayCurrentSupplierRecord(results);
+                }
+
+            } catch (QueryException e) {
+                view.displayError(e.getMessage());
+                System.exit(1);
+            }
+    }
       
 }
