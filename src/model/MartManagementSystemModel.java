@@ -18,11 +18,12 @@ import java.util.List;
  *
  * @author sabin
  */
-public class MartManagementSystemModel implements  IConnect, IQuery<MartManagementSystemModel.Query, Employee, Supplier> {
+public class MartManagementSystemModel implements  IConnect, IQuery<MartManagementSystemModel.Query, Employee, Supplier, Item> {
     
      public static enum Query {
         INSERT,ALL,EMPLOYEENAME,UPDATE,DELETE,
-        INSERTSUPPLIER,DISPLAYALLSUPPLIER,SUPPLIERNAME,UPDATESUPPLIER,DELETESUPPLIER
+        INSERTSUPPLIER,DISPLAYALLSUPPLIER,SUPPLIERNAME,UPDATESUPPLIER,DELETESUPPLIER,
+        INSERTITEM,DISPLAYALLITEM,ITEMNAME,UPDATEITEM,DELETEITEM
     };
      
 
@@ -73,6 +74,23 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
         //delete employee
         sqlCommands.put(Query.DELETESUPPLIER,
                 "DELETE FROM SUPPLIER WHERE SUPPLIERID = ?");
+        
+        
+         //ITEM 
+         sqlCommands.put(MartManagementSystemModel.Query.INSERTITEM,
+                "INSERT INTO ITEM (ITEMNAME, ITEMQUANTITY, ITEMPRICE, BARCODE, ITEMSUPPLIER, EXPIRYDATE ) VALUES ( ?, ?, ?, ?, ?, ? )");
+         //get records of all SUPPLIERS
+        sqlCommands.put(MartManagementSystemModel.Query.DISPLAYALLITEM,
+                "SELECT * FROM ITEM ORDER BY ITEMQUANTITY");
+        //select employee with particular name
+         sqlCommands.put(Query.ITEMNAME,
+                "SELECT * FROM ITEM WHERE ITEMNAME = ? AND BARCODE = ?");
+         // update EMPLOYEE
+        sqlCommands.put(Query.UPDATEITEM,
+                "UPDATE ITEM SET ITEMNAME = ? , ITEMQUANTITY =?, ITEMPRICE = ? , BARCODE = ? , ITEMSUPPLIER = ?, EXPIRYDATE = ?  WHERE ITEMID = ?");
+        //delete employee
+        sqlCommands.put(Query.DELETEITEM,
+                "DELETE FROM ITEM WHERE ITEMID = ?");
         
        
     }
@@ -154,6 +172,20 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
         return -1;
     }
     
+    
+     @Override
+    public int itemCommand(Query query, Item item) throws QueryException {
+        switch (query) {
+            case INSERTITEM:
+                return addItem(item);
+            case UPDATEITEM:
+                return updateItem(item);
+            case DELETEITEM:
+                return deleteItem(item);
+        }
+        // Should never happen
+        return -1;
+    }
     
     
     
@@ -444,6 +476,166 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
             List<Supplier> results = new ArrayList<>();
             while (resultSet.next()) {
                 results.add(createSupplier(resultSet));
+            }
+            return results;
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to execute selection query", e));
+        }
+    }
+     
+     
+     
+     
+     
+       //ITEM
+     
+     
+     
+      @Override
+    public List<Item> selectItem(Query q, Object... o) throws QueryException {
+        switch (q) {
+             case DISPLAYALLITEM:
+                return getAllItem();
+             case ITEMNAME:
+                return getItemByName((String) o[0], (String) o[1]);
+        }
+        // Should never happen
+        return null;
+    }
+
+    
+    
+    private Item createItem(ResultSet rs) throws QueryException {
+        Item ite = null;
+        try {
+            ite = new Item(
+                    rs.getInt("itemID"),
+                    rs.getString("itemName"),
+                    rs.getString("itemQuantity"),
+                    rs.getString("itemPrice"),
+                    rs.getString("Barcode"),
+                    rs.getString("itemSupplier"),
+                    rs.getString("ExpiryDate")
+                    
+            );
+        } catch (SQLException e) {
+            System.out.println(e);
+            throw (new QueryException("Unable to process the result of selection query", e));
+        }
+        return ite;
+    }
+
+    /*
+     * Add a record to the database. Record fields are extracted from the method
+     * parameter, which is a Supplier object. 
+     */
+    private int addItem(Item item) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.INSERTITEM);
+
+        // insert student attributes into prepared statement
+        try {
+            ps.setString(1, item.getItemName());
+            ps.setString(2, item.getItemQuantity());
+            ps.setString(3, item.getItemPrice());
+            ps.setString(4, item.getItemBarcode());
+            ps.setString(5, item.getItemSupplier());
+            ps.setString(6, item.getItemExpiryDate());
+
+           
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform insert command", e));
+        }
+    }
+
+    private int updateItem(Item item) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.UPDATEITEM);
+
+        // update student attributes into prepared statement
+        try {
+
+            ps.setString(1, item.getItemName());
+            ps.setString(2, item.getItemQuantity());
+            ps.setString(3, item.getItemPrice());
+            ps.setString(4, item.getItemBarcode());
+            ps.setString(5, item.getItemSupplier());
+            ps.setString(6, item.getItemExpiryDate());
+            ps.setInt(7, item.getItemID());
+            
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform update command", e));
+        }
+    }
+    
+     private int deleteItem(Item item) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.DELETEITEM);
+
+        // update student attributes into prepared statement
+        try {
+            ps.setInt(1, item.getItemID());
+            
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to perform update command", e));
+        }
+    }
+    
+
+    /*
+     * Select list of all items
+     */
+    private List<Item> getAllItem() throws QueryException {
+        // get prepared statement
+        PreparedStatement ps = statements.get(Query.DISPLAYALLITEM);
+
+        try (ResultSet resultSet = ps.executeQuery()) {
+            List<Item> results = new ArrayList<>();
+            while (resultSet.next()) {
+                Item item = createItem(resultSet);
+                results.add(item);
+            }
+            return results;
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to execute selection query", e));
+        }
+    }
+    
+    
+    
+     private List<Item> getItemByName(String name, String id) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.ITEMNAME);
+        try {
+            // Insert grade into prepared statement
+            ps.setString(1, name);
+            ps.setString(2, id );
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try (ResultSet resultSet = ps.executeQuery()) {
+            List<Item> results = new ArrayList<>();
+            while (resultSet.next()) {
+                results.add(createItem(resultSet));
             }
             return results;
         } catch (SQLException e) {

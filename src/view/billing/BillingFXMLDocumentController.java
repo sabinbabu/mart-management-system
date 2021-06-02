@@ -26,10 +26,12 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.ConnectionException;
 import model.Employee;
+import model.Item;
 import model.MartManagementSystemModel;
 import model.Supplier;
 import presenter.EmployeePresenter;
 import presenter.IndexedEmployee;
+import presenter.IndexedItem;
 import presenter.IndexedSupplier;
 import view.IView;
 
@@ -38,7 +40,7 @@ import view.IView;
  *
  * @author sabin
  */
-public class BillingFXMLDocumentController implements Initializable, IView<IndexedEmployee,IndexedSupplier> {
+public class BillingFXMLDocumentController implements Initializable, IView<IndexedEmployee,IndexedSupplier,IndexedItem> {
 
     public static Stage stg;
     EmployeePresenter employeePresenter;
@@ -67,6 +69,16 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     
     
     @FXML
+    private TextArea itemDisplay;
+    @FXML
+    private ComboBox<String> itemSearch;
+    private List<Item> itemList;
+    public static String selectedItemComboValue;
+
+    
+    
+    
+    @FXML
     private Tab tabBilling;
     @FXML
     private Tab tabReport;
@@ -91,10 +103,6 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private Button addItem;
     @FXML
     private Button btnSearchItem;
-    @FXML
-    private TextArea itemDisplay;
-    @FXML
-    private ComboBox<?> itemSearch;
     @FXML
     private Button addSupplier;
     @FXML
@@ -341,35 +349,125 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
 
 
     
-    
-    
-    
-    
-    
-    
-    
+    //ITEM
     
     
     @FXML
     private void onAddItem(ActionEvent event) {
+        goToAddItem();
+    }
+    
+     public void goToAddItem() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/billing/AddItemFXMLDocument.fxml"));
+            Parent root = loader.load();
+            AddItemFXMLDocumentController controller = loader.getController();
+            Stage stage = new Stage();
+            this.stg = stage;
+            stage.setTitle("ADD ITEM");
+            MartManagementSystemModel martManagementSystemModel = new MartManagementSystemModel();
+            try {
+                // connecting to database   
+                martManagementSystemModel.connect();
+                martManagementSystemModel.initialise();
+            } catch (ConnectionException e) {
+                System.err.println(e.getMessage());
+                e.getCause().printStackTrace();
+                System.exit(1);
+            }
+            EmployeePresenter employeePresenter = new EmployeePresenter((IView) controller, martManagementSystemModel, martManagementSystemModel);
+            controller.bind(employeePresenter);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    private void onItemSearchPressed(ActionEvent event) {
-    }
-
-    @FXML
-    private void onDisplayAllIteemPressed(ActionEvent event) {
-    }
-
+     
     @FXML
     private void tabInventory(Event event) {
+         employeePresenter.selectAllItem();
+         employeePresenter.populateItemCombobox();
+    }
+    
+    
+    @FXML
+    private void onDisplayAllIteemPressed(ActionEvent event) {
+        employeePresenter.selectAllItem();
+    }
+
+    @Override
+    public void displayItemRecord(IndexedItem indexedItem) {
+        itemDisplay.clear();
+        itemList = indexedItem.getAllItems();
+        itemDisplay.appendText("\n\tName\t\t\tPrice\t\tQuantity\t\tSupplier\t\tExpiry Date\n");
+        itemDisplay.appendText("--------------------------------------------------------------------------\n");
+        for (Item item : itemList) {
+            itemDisplay.appendText("\t" + item.getItemName() + "\t\t\t" + item.getItemPrice() + "\t\t" + item.getItemQuantity() + "\t\t" + item.getItemSupplier()+ "\t\t" + item.getItemExpiryDate()+ "\n");
+        }
+        employeePresenter.populateItemCombobox();
     }
 
     
+    @Override
+    public void populateItemCombobox(IndexedItem indexedItem) {
+        itemList = indexedItem.getAllItems();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        for (Item item : itemList) {
+            list.add(item.getItemName()+","+item.getItemBarcode());
+        }
+       itemSearch.setItems(list);
+    }
+
+    
+    @FXML
+    private void onItemSearchPressed(ActionEvent event) {
+         if(!itemSearch.getValue().isEmpty()){
+           goToShowItemDetail();
+        }
+    }
+    
+    
+       private void goToShowItemDetail() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/billing/ShowItemDetailsFXML.fxml"));
+            Parent root = loader.load();
+            ShowItemDetailsFXMLController controller = loader.getController();
+            Stage stage = new Stage();
+            this.stg = stage;
+            stage.setTitle("UPDATE ITEM");
+            MartManagementSystemModel martManagementSystemModel = new MartManagementSystemModel();
+            try {
+                // connecting to database   
+                martManagementSystemModel.connect();
+                martManagementSystemModel.initialise();
+            } catch (ConnectionException e) {
+                System.err.println(e.getMessage());
+                e.getCause().printStackTrace();
+                System.exit(1);
+            }
+            EmployeePresenter employeePresenter = new EmployeePresenter((IView) controller, martManagementSystemModel, martManagementSystemModel);
+            controller.bind(employeePresenter);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+       @FXML
+    private void onItemSelectCombobox(ActionEvent event) {
+         BillingFXMLDocumentController.selectedItemComboValue = itemSearch.getValue();
+    }
 
 
    
+    
+    
+    
 
    
     
@@ -409,7 +507,13 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
         supDisplay.setText(m);
     }
 
- 
+
+
+    @Override
+    public void displayItemMessage(String m) {
+        itemDisplay.setText(m);
+    }
+
     
 }
    

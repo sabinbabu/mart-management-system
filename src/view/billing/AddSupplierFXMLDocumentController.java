@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import presenter.EmployeePresenter;
 import presenter.IndexedEmployee;
+import presenter.IndexedItem;
 import presenter.IndexedSupplier;
 import view.IView;
 
@@ -23,7 +24,7 @@ import view.IView;
  *
  * @author sabin
  */
-public class AddSupplierFXMLDocumentController implements Initializable, IView<IndexedSupplier,IndexedEmployee> {
+public class AddSupplierFXMLDocumentController implements Initializable, IView<IndexedSupplier,IndexedEmployee,IndexedItem> {
     
        EmployeePresenter employeePresenter;
 
@@ -101,6 +102,21 @@ public class AddSupplierFXMLDocumentController implements Initializable, IView<I
 
     @Override
     public void displaySupplierMessage(String m) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void displayItemRecord(IndexedItem i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void populateItemCombobox(IndexedItem i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void displayItemMessage(String m) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

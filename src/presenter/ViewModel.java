@@ -7,6 +7,7 @@ package presenter;
 
 import java.util.List;
 import model.Employee;
+import model.Item;
 import model.Supplier;
 
 /**
@@ -25,6 +26,12 @@ public class ViewModel {
     Supplier currentSupplier;
     int indexSupplier;
     int nSupplier;
+    
+    List<Item> modelItem;
+    Item currentItem;
+    int indexItem;
+    int nItem;
+    
 
     ViewModel() { }
 
@@ -54,5 +61,17 @@ public class ViewModel {
  
     IndexedSupplier allSupplier(){
               return new IndexedSupplier(modelSupplier);
+     }
+    
+    
+     // ITEM
+    
+    void setItem(List<Item> m) {
+        modelItem = m;
+    }
+
+ 
+    IndexedItem allItem(){
+              return new IndexedItem(modelItem);
      }
 }

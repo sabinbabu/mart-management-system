@@ -10,15 +10,21 @@ import javafx.scene.control.Alert;
 import model.Employee;
 import model.IConnect;
 import model.IQuery;
+import model.Item;
 import static model.MartManagementSystemModel.Query.ALL;
 import static model.MartManagementSystemModel.Query.DELETE;
+import static model.MartManagementSystemModel.Query.DELETEITEM;
 import static model.MartManagementSystemModel.Query.DELETESUPPLIER;
+import static model.MartManagementSystemModel.Query.DISPLAYALLITEM;
 import static model.MartManagementSystemModel.Query.DISPLAYALLSUPPLIER;
 import static model.MartManagementSystemModel.Query.EMPLOYEENAME;
 import static model.MartManagementSystemModel.Query.INSERT;
+import static model.MartManagementSystemModel.Query.INSERTITEM;
 import static model.MartManagementSystemModel.Query.INSERTSUPPLIER;
+import static model.MartManagementSystemModel.Query.ITEMNAME;
 import static model.MartManagementSystemModel.Query.SUPPLIERNAME;
 import static model.MartManagementSystemModel.Query.UPDATE;
+import static model.MartManagementSystemModel.Query.UPDATEITEM;
 import static model.MartManagementSystemModel.Query.UPDATESUPPLIER;
 import model.QueryException;
 import model.Supplier;
@@ -322,6 +328,153 @@ public class EmployeePresenter {
                 } else {
                     viewmodel.setSupplier(results);
                     displayCurrentSupplierRecord(results);
+                }
+
+            } catch (QueryException e) {
+                view.displayError(e.getMessage());
+                System.exit(1);
+            }
+    }
+       
+       
+       
+       
+       
+          //ITEM
+       
+        public void insertItem(String itemName, String itemQuantity, String itemPrice, String itemBarcode, String itemSupplier, String itemExpiryDate) throws IllegalArgumentException {
+
+        if (itemName.equals("") || itemQuantity.equals("") || itemPrice.equals("") || itemBarcode.equals("")|| itemSupplier.equals("") || itemExpiryDate.equals("")) {
+            throw new IllegalArgumentException("Arguments must not contain an empty string");
+        }
+        try {
+
+            Item item = new Item(itemName, itemQuantity, itemPrice, itemBarcode,itemSupplier,itemExpiryDate);
+            int result = queries.itemCommand(INSERTITEM, item);
+            if (result == 1) {               
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setAlertType(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("Item Added");
+            alert.show();
+            } else {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("Error");
+            alert.show();
+            }
+
+        } catch (QueryException e) {
+            System.exit(1);
+        }
+    }
+     
+   
+     public void updateItem(int itemID,String itemName, String itemQuantity, String itemPrice, String itemBarcode, String itemSupplier, String itemExpiryDate) throws IllegalArgumentException {
+
+      if (itemName.equals("") || itemQuantity.equals("") || itemPrice.equals("") || itemBarcode.equals("")|| itemSupplier.equals("") || itemExpiryDate.equals("")) {
+            throw new IllegalArgumentException("Arguments must not contain an empty string");
+        }
+        try {
+
+            Item item = new Item(itemID, itemName, itemQuantity, itemPrice, itemBarcode,itemSupplier,itemExpiryDate);
+            int result = queries.itemCommand(UPDATEITEM, item);
+            
+            if (result == 1) {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Item Updated");
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setContentText("Item not updated");
+                alert.show();
+            }
+          
+        } catch (QueryException e) {
+            view.displayError(e.getMessage());
+            System.exit(1);
+        }
+    }
+      
+      
+      public void deleteItem(int itemId) throws IllegalArgumentException {
+        try {
+
+            Item item = new Item(itemId, "", "", "", "","","");
+            int result = queries.itemCommand(DELETEITEM, item);
+            
+            if (result == 1) {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Item Deleted");
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setAlertType(Alert.AlertType.ERROR);
+                alert.setContentText("Item not deleted");
+                alert.show();
+            }
+          
+        } catch (QueryException e) {
+            view.displayError(e.getMessage());
+           // System.exit(1);
+        }
+    }
+     
+     
+      public void selectAllItem() {                 
+        try {
+            List results = queries.selectItem(DISPLAYALLITEM);            
+            viewmodel.setItem(results);
+            displayCurrentItemRecord(results);
+          
+        } catch (QueryException e) {
+            System.out.println(e);
+          
+         //   System.exit(1);
+        }
+    }
+      
+      
+      private void displayCurrentItemRecord(List results) {
+        if (results.isEmpty()) {
+            view.displayItemMessage("No Items found");
+            return;
+        }
+        view.displayItemRecord(viewmodel.allItem());
+      
+    }          
+      
+      
+      public void populateItemCombobox(){
+          try{
+            List results = queries.selectItem(DISPLAYALLITEM);
+             viewmodel.setItem(results);
+             if (results.isEmpty()) {
+          //  view.displayMessage("No records found");
+             }
+             view.populateItemCombobox(viewmodel.allItem());
+             
+          }catch(QueryException e){
+            view.displayError(e.getMessage());
+            System.exit(1);
+          }
+      }
+      
+      
+       public void findByItem(String name,String number) {
+
+        if (name.equals("")) {
+            throw new IllegalArgumentException("Argument must not be an empty string");
+        }
+            try {
+                List results = queries.selectItem(ITEMNAME, name, number);
+                if (results.isEmpty()) {
+                    view.displayMessage("No records found");
+                } else {
+                    viewmodel.setItem(results);
+                    displayCurrentItemRecord(results);
                 }
 
             } catch (QueryException e) {

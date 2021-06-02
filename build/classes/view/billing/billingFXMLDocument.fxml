@@ -38,7 +38,7 @@
                               <Button fx:id="btnSearchItem" layoutX="820.0" layoutY="103.0" mnemonicParsing="false" onAction="#onItemSearchPressed" text="Search" />
                               <TextArea fx:id="itemDisplay" layoutX="14.0" layoutY="140.0" prefHeight="259.0" prefWidth="862.0" />
                               <Button layoutX="14.0" layoutY="103.0" mnemonicParsing="false" onAction="#onDisplayAllIteemPressed" text="Display All Items" />
-                              <ComboBox fx:id="itemSearch" layoutX="15.0" layoutY="62.0" onAction="#onItemSearchPressed" prefHeight="26.0" prefWidth="873.0" promptText="Select an item" />
+                              <ComboBox fx:id="itemSearch" layoutX="15.0" layoutY="62.0" onAction="#onItemSelectCombobox" prefHeight="26.0" prefWidth="873.0" promptText="Select an item" />
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>

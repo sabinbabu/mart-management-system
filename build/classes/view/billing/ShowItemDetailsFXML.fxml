@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="329.0" prefWidth="389.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.billing.ShowItemDetailsFXMLController">
+   <children>
+      <Label layoutX="22.0" layoutY="57.0" prefHeight="18.0" prefWidth="71.0" text="Name " />
+      <TextField fx:id="itemNameTextField" layoutX="105.0" layoutY="51.0" prefHeight="26.0" prefWidth="260.0" />
+      <Button fx:id="btnCancel" layoutX="22.0" layoutY="273.0" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="94.0" text="Cancel" />
+      <Button fx:id="btnUpdate" layoutX="145.0" layoutY="273.0" mnemonicParsing="false" onAction="#onUpdatePressed" prefHeight="26.0" prefWidth="100.0" text="Update" />
+      <Button fx:id="btnDelete" layoutX="266.0" layoutY="273.0" mnemonicParsing="false" onAction="#onDeletePressed" prefHeight="26.0" prefWidth="100.0" text="Delete" textFill="RED" />
+      <Label layoutX="22.0" layoutY="94.0" prefHeight="18.0" prefWidth="71.0" text="Quantity" />
+      <Label layoutX="22.0" layoutY="136.0" prefHeight="18.0" prefWidth="71.0" text="Barcode" />
+      <Label layoutX="21.0" layoutY="178.0" prefHeight="18.0" prefWidth="71.0" text="Expiry Date" />
+      <TextField fx:id="itemBarcodeTextField" layoutX="105.0" layoutY="132.0" prefHeight="26.0" prefWidth="260.0" />
+      <TextField fx:id="itemQuantityTextField" layoutX="104.0" layoutY="90.0" prefHeight="26.0" prefWidth="100.0" />
+      <TextField fx:id="itemExpiryTextField" layoutX="105.0" layoutY="174.0" prefHeight="26.0" prefWidth="260.0" />
+      <Label layoutX="215.0" layoutY="94.0" prefHeight="18.0" prefWidth="71.0" text="Price" />
+      <TextField fx:id="itemPriceTextField" layoutX="263.0" layoutY="90.0" prefHeight="26.0" prefWidth="100.0" />
+      <ComboBox fx:id="supplierSelect" layoutX="105.0" layoutY="218.0" onAction="#onSupplierSelectPressed" prefHeight="26.0" prefWidth="260.0" promptText="Select supplier" />
+      <Label layoutX="21.0" layoutY="222.0" prefHeight="18.0" prefWidth="71.0" text="Supplier" />
+   </children>
+</AnchorPane>
