@@ -5,6 +5,8 @@
  */
 package view.login;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +23,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import martmanagementsystem.MartManagementSystem;
 import model.ConnectionException;
@@ -54,6 +58,8 @@ public class LoginPageFXMLDocumentController implements Initializable,IView<Inde
     private TextField loginPassword;
     @FXML
     private Button btnLogin;
+    @FXML
+    private ImageView imageLogo;
 
     @FXML
     private void onLoginClicked(ActionEvent event) {
@@ -91,7 +97,8 @@ public class LoginPageFXMLDocumentController implements Initializable,IView<Inde
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+        Image image = new Image("/view/billing/logoJPG.JPG");
+        imageLogo.setImage(image);
     }
 
     private void goToAdminHomepage() {

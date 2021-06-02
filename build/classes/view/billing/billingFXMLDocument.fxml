@@ -17,7 +17,7 @@
 <AnchorPane id="AnchorPane" prefHeight="560.0" prefWidth="902.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.billing.BillingFXMLDocumentController">
    <children>
       <ImageView fx:id="companyLogo" fitHeight="59.0" fitWidth="146.0" layoutX="368.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="companyAddress" layoutX="427.0" layoutY="80.0" text="Label" />
+      <Label fx:id="companyAddress" layoutX="233.0" layoutY="80.0" text="Label" />
       <Separator layoutY="109.0" prefHeight="0.0" prefWidth="893.0" />
       <Label fx:id="welcomeUser" layoutX="718.0" layoutY="80.0" prefHeight="18.0" prefWidth="166.0" text="Label" />
       <Separator layoutY="149.0" prefHeight="3.0" prefWidth="894.0" />

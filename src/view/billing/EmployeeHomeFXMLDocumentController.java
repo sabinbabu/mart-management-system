@@ -8,8 +8,6 @@ package view.billing;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -20,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -77,7 +76,9 @@ public class EmployeeHomeFXMLDocumentController implements Initializable, IView<
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Image image = new Image("/view/billing/logoJPG.JPG");
+        companyLogo.setImage(image);
+        companyAddress.setText("Westfield Hurstville Shopping Centre , Hurstville NSW 2220");
     }    
 
     @FXML

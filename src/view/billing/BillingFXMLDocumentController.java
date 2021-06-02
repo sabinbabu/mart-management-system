@@ -25,6 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -164,6 +165,9 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
         login_username.setText("Admin");
         login_email.setText("admin@hoolamart.com");
         login_number.setText("0425896578");
+         Image image = new Image("/view/billing/logoJPG.JPG");
+        companyLogo.setImage(image);
+        companyAddress.setText("Westfield Hurstville Shopping Centre , Hurstville NSW 2220");
     }
     
     //EMPLOYEE
