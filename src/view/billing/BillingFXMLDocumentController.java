@@ -26,7 +26,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import martmanagementsystem.MartManagementSystem;
 import model.ConnectionException;
 import model.Employee;
 import model.Item;
@@ -37,6 +39,7 @@ import presenter.IndexedEmployee;
 import presenter.IndexedItem;
 import presenter.IndexedSupplier;
 import view.IView;
+import view.login.LoginPageFXMLDocumentController;
 
 /**
  * FXML Controller class
@@ -139,6 +142,14 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private Button addSupplier;
     @FXML
     private Button btnSearchSup;
+    
+    
+    @FXML
+    private Text login_username;
+    @FXML
+    private Text login_email;
+    @FXML
+    private Text login_number;
    
      
     /**
@@ -151,7 +162,10 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        welcomeUser.setText("Welcome" + " " + "admin");        
+        welcomeUser.setText("Welcome" + " " + "admin");  
+        login_username.setText("Admin");
+        login_email.setText("admin@hoolamart.com");
+        login_number.setText("0425896578");
     }
     
     //EMPLOYEE
@@ -489,7 +503,7 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
         itemList = indexedItem.getAllItems();
         ObservableList<String> list = FXCollections.observableArrayList();
         for (Item item : itemList) {
-            list.add(item.getItemName()+","+item.getItemBarcode());
+            list.add(item.getItemName()+",("+item.getItemQuantity()+")");
         }
        itemSearch.setItems(list);
     }
@@ -586,6 +600,25 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     @Override
     public void displayItemMessage(String m) {
         itemDisplay.setText(m);
+    }
+
+    
+    
+    // LOGOUT
+    
+    @FXML
+    private void btn_logout(ActionEvent event) {        
+        try {            
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login/LoginPageFXMLDocument.fxml"));
+            Stage stage = new Stage();
+            this.stg = stage;
+            stage.setTitle("Login");
+            stage.setScene(new Scene(root));
+            stage.show();
+            LoginPageFXMLDocumentController.stg.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     

@@ -32,6 +32,7 @@ import view.billing.BillingFXMLDocumentController;
  */
 public class LoginPageFXMLDocumentController implements Initializable {
 
+     public static Stage stg;
     @FXML
     private Label label;
     @FXML
@@ -65,6 +66,7 @@ public class LoginPageFXMLDocumentController implements Initializable {
                 Parent root = loader.load();
                 BillingFXMLDocumentController controller = loader.getController();
                 Stage stage = new Stage();
+                this.stg = stage;
                 stage.setTitle("Mart Management System");
                 MartManagementSystemModel martManagementSystemModel = new MartManagementSystemModel();
                 try {

@@ -84,7 +84,7 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
                 "SELECT * FROM ITEM ORDER BY ITEMQUANTITY");
         //select employee with particular name
          sqlCommands.put(Query.ITEMNAME,
-                "SELECT * FROM ITEM WHERE ITEMNAME = ? AND BARCODE = ?");
+                "SELECT * FROM ITEM WHERE ITEMNAME = ? AND ITEMQUANTITY = ?");
          // update EMPLOYEE
         sqlCommands.put(Query.UPDATEITEM,
                 "UPDATE ITEM SET ITEMNAME = ? , ITEMQUANTITY =?, ITEMPRICE = ? , BARCODE = ? , ITEMSUPPLIER = ?, EXPIRYDATE = ?  WHERE ITEMID = ?");

@@ -67,7 +67,7 @@ public class ShowItemDetailsFXMLController implements Initializable, IView<Index
         employeePresenter = pp;
         String name = BillingFXMLDocumentController.selectedItemComboValue.split(",")[0];
         String number = BillingFXMLDocumentController.selectedItemComboValue.split(",")[1];
-        employeePresenter.findByItem(name, number);
+        employeePresenter.findByItem(name, number.substring(1, number.length() - 1));
         employeePresenter.populateSupplierCombobox();
     }
 
