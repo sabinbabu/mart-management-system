@@ -23,7 +23,8 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
      public static enum Query {
         INSERT,ALL,EMPLOYEENAME,UPDATE,DELETE,
         INSERTSUPPLIER,DISPLAYALLSUPPLIER,SUPPLIERNAME,UPDATESUPPLIER,DELETESUPPLIER,
-        INSERTITEM,DISPLAYALLITEM,ITEMNAME,UPDATEITEM,DELETEITEM
+        INSERTITEM,DISPLAYALLITEM,ITEMNAME,UPDATEITEM,DELETEITEM,
+        AUTHNAME
     };
      
 
@@ -91,6 +92,11 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
         //delete employee
         sqlCommands.put(Query.DELETEITEM,
                 "DELETE FROM ITEM WHERE ITEMID = ?");
+        
+        
+        //AUTH_NAME
+         sqlCommands.put(Query.AUTHNAME,
+                "SELECT * FROM EMPLOYEE WHERE EMPLOYEENAME = ?");
         
        
     }
@@ -200,6 +206,8 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
                 return getAllEmployee();
              case EMPLOYEENAME:
                 return getEmployeeByName((String) o[0], (String) o[1]);
+             case AUTHNAME:
+                 return getEmployeeAuthByName((String) o[0]);
         }
         // Should never happen
         return null;
@@ -336,6 +344,31 @@ public class MartManagementSystemModel implements  IConnect, IQuery<MartManageme
         }
     }
      
+     
+     //AUTH
+     
+       private List<Employee> getEmployeeAuthByName(String name) throws QueryException {
+        // Look up prepared statement
+        PreparedStatement ps = statements.get(Query.AUTHNAME);
+        try {
+            // Insert grade into prepared statement
+            ps.setString(1, name);
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to paramaterise selection query", e));
+        }
+
+        try (ResultSet resultSet = ps.executeQuery()) {
+            List<Employee> results = new ArrayList<>();
+            while (resultSet.next()) {
+                results.add(createEmployee(resultSet));
+            }
+            return results;
+        } catch (SQLException e) {
+            throw (new QueryException("Unable to execute selection query", e));
+        }
+    }
+     
+         
      
      
      //SUPPLIER

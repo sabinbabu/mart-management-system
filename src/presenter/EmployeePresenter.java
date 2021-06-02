@@ -12,6 +12,7 @@ import model.IConnect;
 import model.IQuery;
 import model.Item;
 import static model.MartManagementSystemModel.Query.ALL;
+import static model.MartManagementSystemModel.Query.AUTHNAME;
 import static model.MartManagementSystemModel.Query.DELETE;
 import static model.MartManagementSystemModel.Query.DELETEITEM;
 import static model.MartManagementSystemModel.Query.DELETESUPPLIER;
@@ -481,6 +482,32 @@ public class EmployeePresenter {
                 view.displayError(e.getMessage());
                 System.exit(1);
             }
+    }
+       
+       
+       
+       
+       //FOR LOGIN EMPLOYEE
+       
+        public void findAuthByName(String name) {
+
+             if (name.equals("")) {
+            throw new IllegalArgumentException("Argument must not be an empty string");
+        }
+            try {
+                List results = queries.select(AUTHNAME, name);
+                if (results.isEmpty()) {
+                    view.displayMessage("No records found");
+                } else {
+                    viewmodel.set(results);
+                    displayCurrentRecord(results);
+                }
+
+            } catch (QueryException e) {
+                view.displayError(e.getMessage());
+                System.exit(1);
+            }
+            
     }
       
 }

@@ -28,7 +28,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import martmanagementsystem.MartManagementSystem;
 import model.ConnectionException;
 import model.Employee;
 import model.Item;
@@ -97,7 +96,7 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private ComboBox<String> itemSearch;
     private List<Item> itemList;
     public static String selectedItemComboValue;
-     @FXML
+    @FXML
     private TableView<Item> itemTable;
     @FXML
     private TableColumn<Item, String> item_name;
@@ -116,32 +115,11 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     @FXML
     private Tab tabBilling;
     @FXML
-    private Tab tabReport;
-    @FXML
-    private Tab tabInventory;
-    @FXML
-    private Tab tabEmployee;
-    @FXML
-    private Tab tabSupplier;
-    @FXML
     private Tab tabMyProfile;
     @FXML
     private TextArea testTextBilling;
     @FXML
     private TextArea textTextReport;
-    @FXML
-    private Button addEmployee;
-    @FXML
-    private Button btnSearchEmp;
-   
-    @FXML
-    private Button addItem;
-    @FXML
-    private Button btnSearchItem;
-    @FXML
-    private Button addSupplier;
-    @FXML
-    private Button btnSearchSup;
     
     
     @FXML
@@ -150,6 +128,26 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private Text login_email;
     @FXML
     private Text login_number;
+    @FXML
+    private Tab tabReport;
+    @FXML
+    private Tab tabInventory;
+    @FXML
+    private Button addItem;
+    @FXML
+    private Button btnSearchItem;
+    @FXML
+    private Tab tabEmployee;
+    @FXML
+    private Button addEmployee;
+    @FXML
+    private Button btnSearchEmp;
+    @FXML
+    private Tab tabSupplier;
+    @FXML
+    private Button addSupplier;
+    @FXML
+    private Button btnSearchSup;
    
      
     /**
@@ -337,7 +335,7 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
          employeePresenter.populateSupplierCombobox();
     }
     
-     @FXML
+    @FXML
     private void onDisplayAllSupplierPressed(ActionEvent event) {
     employeePresenter.selectAllSupplier();
     }
@@ -382,7 +380,7 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     }
     
     
-     @FXML
+    @FXML
     private void onSupEditPressed(ActionEvent event) {
         if(!suppllierSearch.getValue().isEmpty()){
            goToShowSupplierDetail();
@@ -546,7 +544,7 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
 
 
 
-       @FXML
+    @FXML
     private void onItemSelectCombobox(ActionEvent event) {
          BillingFXMLDocumentController.selectedItemComboValue = itemSearch.getValue();
     }
@@ -607,18 +605,37 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     // LOGOUT
     
     @FXML
-    private void btn_logout(ActionEvent event) {        
-        try {            
-            Parent root = FXMLLoader.load(getClass().getResource("/view/login/LoginPageFXMLDocument.fxml"));
+    private void btn_logout(ActionEvent event) {     
+        
+        
+         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/LoginPageFXMLDocument.fxml"));
+            Parent root = loader.load();
+            LoginPageFXMLDocumentController controller = loader.getController();
             Stage stage = new Stage();
             this.stg = stage;
             stage.setTitle("Login");
+            MartManagementSystemModel martManagementSystemModel = new MartManagementSystemModel();
+            try {
+                // connecting to database   
+                martManagementSystemModel.connect();
+                martManagementSystemModel.initialise();
+            } catch (ConnectionException e) {
+                System.err.println(e.getMessage());
+                e.getCause().printStackTrace();
+                System.exit(1);
+            }
+            EmployeePresenter employeePresenter = new EmployeePresenter((IView) controller, martManagementSystemModel, martManagementSystemModel);
+            controller.bind(employeePresenter);
             stage.setScene(new Scene(root));
             stage.show();
             LoginPageFXMLDocumentController.stg.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        
+               
     }
 
     

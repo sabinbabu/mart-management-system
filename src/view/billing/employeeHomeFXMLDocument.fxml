@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="560.0" prefWidth="902.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.billing.EmployeeHomeFXMLDocumentController">
+   <children>
+      <ImageView fx:id="companyLogo" fitHeight="59.0" fitWidth="146.0" layoutX="368.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="companyAddress" layoutX="427.0" layoutY="80.0" text="Label" />
+      <Separator layoutY="109.0" prefHeight="0.0" prefWidth="893.0" />
+      <Label fx:id="welcomeUser" layoutX="718.0" layoutY="80.0" prefHeight="18.0" prefWidth="166.0" text="Label" />
+      <Separator layoutY="149.0" prefHeight="3.0" prefWidth="894.0" />
+      <TabPane layoutY="112.0" prefHeight="446.0" prefWidth="902.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tabBilling" onSelectionChanged="#tabBilling" text="Billing">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="testTextBilling" layoutX="28.0" layoutY="22.0" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="tabMyProfile" text="My Profile">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="34.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Profile">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="39.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+                        <Text layoutX="40.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                        <Text layoutX="41.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number" />
+                        <Text fx:id="login_username" layoutX="212.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Name" />
+                        <Text fx:id="login_email" layoutX="212.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="useremail@email.com" />
+                        <Text fx:id="login_number" layoutX="212.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Number" />
+                        <Button layoutX="363.0" layoutY="208.0" mnemonicParsing="false" onAction="#btn_logout" text="Log Out" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
