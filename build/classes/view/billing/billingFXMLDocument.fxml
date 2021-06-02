@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -36,9 +38,17 @@
                            <children>
                               <Button fx:id="addItem" layoutX="769.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddItem" text="Add Item" />
                               <Button fx:id="btnSearchItem" layoutX="820.0" layoutY="103.0" mnemonicParsing="false" onAction="#onItemSearchPressed" text="Search" />
-                              <TextArea fx:id="itemDisplay" layoutX="14.0" layoutY="140.0" prefHeight="259.0" prefWidth="862.0" />
                               <Button layoutX="14.0" layoutY="103.0" mnemonicParsing="false" onAction="#onDisplayAllIteemPressed" text="Display All Items" />
                               <ComboBox fx:id="itemSearch" layoutX="15.0" layoutY="62.0" onAction="#onItemSelectCombobox" prefHeight="26.0" prefWidth="873.0" promptText="Select an item" />
+                              <TableView fx:id="itemTable" layoutX="18.0" layoutY="140.0" prefHeight="212.0" prefWidth="866.0">
+                                <columns>
+                                  <TableColumn fx:id="item_name" prefWidth="150.3999900817871" text="Name" />
+                                  <TableColumn fx:id="item_quantity" minWidth="0.0" prefWidth="112.00004577636719" text="Quantity" />
+                                    <TableColumn fx:id="item_price" prefWidth="110.39999389648438" text="Price" />
+                                    <TableColumn fx:id="item_supplier" prefWidth="258.39996337890625" text="Supplier" />
+                                    <TableColumn fx:id="item_expiryDate" prefWidth="208.7999267578125" text="Expiry Date" />
+                                </columns>
+                              </TableView>
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>
@@ -64,9 +74,15 @@
                      <children>
                         <Button fx:id="addEmployee" layoutX="769.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddEmployee" text="Add Employee" />
                         <Button fx:id="btnSearchEmp" layoutX="820.0" layoutY="103.0" mnemonicParsing="false" onAction="#onEmpSearchPressed" text="Search" />
-                        <TextArea fx:id="empDisplay" layoutX="14.0" layoutY="140.0" prefHeight="259.0" prefWidth="862.0" />
                         <Button layoutX="14.0" layoutY="103.0" mnemonicParsing="false" onAction="#onDisplayAllEmployeePressed" text="Display All Employees" />
                         <ComboBox fx:id="employeeSearch" layoutX="15.0" layoutY="62.0" onAction="#onEmployeeSearchPressed" prefHeight="26.0" prefWidth="873.0" promptText="Select an employee" />
+                        <TableView fx:id="employeeTable" layoutX="15.0" layoutY="144.0" prefHeight="256.0" prefWidth="879.0">
+                          <columns>
+                            <TableColumn fx:id="employee_name" prefWidth="263.999981880188" text="Name" />
+                            <TableColumn fx:id="employee_email" prefWidth="351.20001220703125" text="Email" />
+                              <TableColumn fx:id="employee_number" prefWidth="261.5999755859375" text="Number" />
+                          </columns>
+                        </TableView>
                      </children>
                   </AnchorPane>
                </content>
@@ -79,9 +95,16 @@
                            <children>
                               <Button fx:id="addSupplier" layoutX="769.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddSupplier" text="Add Supplier" />
                               <Button fx:id="btnSearchSup" layoutX="820.0" layoutY="103.0" mnemonicParsing="false" onAction="#onSupEditPressed" text="Edit" />
-                              <TextArea fx:id="supDisplay" layoutX="14.0" layoutY="140.0" prefHeight="259.0" prefWidth="862.0" />
                               <Button layoutX="14.0" layoutY="103.0" mnemonicParsing="false" onAction="#onDisplayAllSupplierPressed" text="Display All Suppliers" />
                               <ComboBox fx:id="suppllierSearch" layoutX="15.0" layoutY="62.0" onAction="#onSupplierSelectCombobox" prefHeight="26.0" prefWidth="873.0" promptText="Select an supplier" />
+                              <TableView fx:id="supplierTable" layoutX="14.0" layoutY="141.0" prefHeight="233.0" prefWidth="864.0">
+                                <columns>
+                                  <TableColumn fx:id="sup_name" prefWidth="244.800030708313" text="Name" />
+                                  <TableColumn fx:id="sup_email" prefWidth="200.79998779296875" text="Email" />
+                                    <TableColumn fx:id="sup_number" prefWidth="134.4000244140625" text="Number" />
+                                    <TableColumn fx:id="sup_address" prefWidth="287.199951171875" text="Address" />
+                                </columns>
+                              </TableView>
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>

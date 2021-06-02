@@ -21,7 +21,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.ConnectionException;
@@ -52,30 +55,59 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private Label welcomeUser;
     
     
-     @FXML
     public TextArea empDisplay;
     @FXML
     private ComboBox<String> employeeSearch;
     public List<Employee> employeeList;
     public static String selectedComboValue ;
-    
-    
     @FXML
+    private TableView<Employee> employeeTable;
+    @FXML
+    private TableColumn<Employee, String> employee_name;
+    @FXML
+    private TableColumn<Employee, String> employee_email;
+    @FXML
+    private TableColumn<Employee, String> employee_number;
+
+    
+    
     private TextArea supDisplay;
     @FXML
     private ComboBox<String> suppllierSearch;
     private List<Supplier> supplierList;
     public static String selectedSupplierComboValue;
-    
-    
     @FXML
+    private TableView<Supplier> supplierTable;
+    @FXML
+    private TableColumn<Supplier, String> sup_name;
+    @FXML
+    private TableColumn<Supplier, String> sup_email;
+    @FXML
+    private TableColumn<Supplier, String> sup_number;
+    @FXML
+    private TableColumn<Supplier, String> sup_address;
+
+    
+    
     private TextArea itemDisplay;
     @FXML
     private ComboBox<String> itemSearch;
     private List<Item> itemList;
     public static String selectedItemComboValue;
+     @FXML
+    private TableView<Item> itemTable;
+    @FXML
+    private TableColumn<Item, String> item_name;
+    @FXML
+    private TableColumn<Item, String> item_quantity;
+    @FXML
+    private TableColumn<Item, String> item_price;
+    @FXML
+    private TableColumn<Item, String> item_supplier;
+    @FXML
+    private TableColumn<Item, String> item_expiryDate;
 
-    
+   
     
     
     @FXML
@@ -107,8 +139,8 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     private Button addSupplier;
     @FXML
     private Button btnSearchSup;
-  
    
+     
     /**
      * Initializes the controller class.
      * @param pp
@@ -150,13 +182,27 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
 
     @Override
     public void displayRecord(IndexedEmployee indexedEmployee) {
-        empDisplay.clear();
-        employeeList = indexedEmployee.getAllEmployee();
-        empDisplay.appendText("\n\tName\t\t\tPhone\t\tEmail\n");
-        empDisplay.appendText("--------------------------------------------------------------------------\n");
-        for (Employee employee : employeeList) {
-            empDisplay.appendText("\t" + employee.getEmployeeName() + "\t\t\t" + employee.getEmployeeEmail() + "\t\t" + employee.getEmployeeNumber() + "\n");
+        
+        employeeTable.getItems().clear();
+        employee_name.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        employee_email.setCellValueFactory(new PropertyValueFactory<>("employeeEmail"));
+        employee_number.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
+      
+         employeeList = indexedEmployee.getAllEmployee();
+         ObservableList<Employee> list = FXCollections.observableArrayList();
+         for (Employee emp : employeeList) {
+            list.add(emp);
         }
+        
+       employeeTable.setItems(list);
+        
+//        empDisplay.clear();
+//        employeeList = indexedEmployee.getAllEmployee();
+//        empDisplay.appendText("\n\tName\t\t\tPhone\t\tEmail\n");
+//        empDisplay.appendText("--------------------------------------------------------------------------\n");
+//        for (Employee employee : employeeList) {
+//            empDisplay.appendText("\t" + employee.getEmployeeName() + "\t\t\t" + employee.getEmployeeEmail() + "\t\t" + employee.getEmployeeNumber() + "\n");
+//        }
         employeePresenter.populateEmployeeCombobox();
     }
 
@@ -285,13 +331,28 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
     
     @Override
     public void displaySupplierRecord(IndexedSupplier indexedSupplier) {
-        supDisplay.clear();
-        supplierList = indexedSupplier.getAllSupplier();
-        supDisplay.appendText("\n\tName\t\t\tPhone\t\tEmail\t\tAddress\n");
-        supDisplay.appendText("--------------------------------------------------------------------------\n");
-        for (Supplier supplier : supplierList) {
-            supDisplay.appendText("\t" + supplier.getSupplierName() + "\t\t\t" + supplier.getSupplierEmail() + "\t\t" + supplier.getSupplierNumber() + "\t\t" + supplier.getSupplierAddress()+ "\n");
+        
+        supplierTable.getItems().clear();
+        sup_name.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+        sup_email.setCellValueFactory(new PropertyValueFactory<>("supplierEmail"));
+        sup_number.setCellValueFactory(new PropertyValueFactory<>("supplierNumber"));
+        sup_address.setCellValueFactory(new PropertyValueFactory<>("supplierAddress"));
+      
+         supplierList = indexedSupplier.getAllSupplier();
+         ObservableList<Supplier> list = FXCollections.observableArrayList();
+         for (Supplier sup : supplierList) {
+            list.add(sup);
         }
+        
+       supplierTable.setItems(list);
+        
+//        supDisplay.clear();
+//        supplierList = indexedSupplier.getAllSupplier();
+//        supDisplay.appendText("\n\tName\t\t\tPhone\t\tEmail\t\tAddress\n");
+//        supDisplay.appendText("--------------------------------------------------------------------------\n");
+//        for (Supplier supplier : supplierList) {
+//            supDisplay.appendText("\t" + supplier.getSupplierName() + "\t\t\t" + supplier.getSupplierEmail() + "\t\t" + supplier.getSupplierNumber() + "\t\t" + supplier.getSupplierAddress()+ "\n");
+//        }
         employeePresenter.populateSupplierCombobox();
     }
     
@@ -399,13 +460,26 @@ public class BillingFXMLDocumentController implements Initializable, IView<Index
 
     @Override
     public void displayItemRecord(IndexedItem indexedItem) {
-        itemDisplay.clear();
-        itemList = indexedItem.getAllItems();
-        itemDisplay.appendText("\n\tName\t\t\tPrice\t\tQuantity\t\tSupplier\t\tExpiry Date\n");
-        itemDisplay.appendText("--------------------------------------------------------------------------\n");
-        for (Item item : itemList) {
-            itemDisplay.appendText("\t" + item.getItemName() + "\t\t\t" + item.getItemPrice() + "\t\t" + item.getItemQuantity() + "\t\t" + item.getItemSupplier()+ "\t\t" + item.getItemExpiryDate()+ "\n");
+        itemTable.getItems().clear();
+        item_name.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        item_quantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+        item_price.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
+        item_supplier.setCellValueFactory(new PropertyValueFactory<>("itemSupplier"));
+        item_expiryDate.setCellValueFactory(new PropertyValueFactory<>("itemExpiryDate"));
+         itemList = indexedItem.getAllItems();
+         ObservableList<Item> list = FXCollections.observableArrayList();
+         for (Item item : itemList) {
+            list.add(item);
         }
+        
+       itemTable.setItems(list);
+//        itemDisplay.clear();
+//        itemList = indexedItem.getAllItems();
+//        itemDisplay.appendText("\n\tName\t\t\tPrice\t\tQuantity\t\tSupplier\t\tExpiry Date\n");
+//        itemDisplay.appendText("--------------------------------------------------------------------------\n");
+//        for (Item item : itemList) {
+//            itemDisplay.appendText("\t" + item.getItemName() + "\t\t\t" + item.getItemPrice() + "\t\t" + item.getItemQuantity() + "\t\t" + item.getItemSupplier()+ "\t\t" + item.getItemExpiryDate()+ "\n");
+//        }
         employeePresenter.populateItemCombobox();
     }
 
